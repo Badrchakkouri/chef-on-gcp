@@ -1,7 +1,7 @@
 
-# How to build the instances with Terraform
+# How to build the instances with Terraform?
 
-First I will have to create a `GCP-account.json` file and fill it with you GCP connection info like project_id, client_id, private_key... this can also be achievable with a better option which is generating directly this file form the GCP IAM console. the json file is being called in the `provider.tf` in order for terraform to use its info to access my GCP account.
+First I create a `GCP-account.json` file and I fill it with my GCP connection info like project_id, client_id, private_key... this can also be done with a better option which is generating directly this file form the GCP IAM console. the json file is being called in the `provider.tf` in order for terraform to use its info to access my GCP account.
 
 Then I will place the files below in a directory, cd to it and run `terraform init` this will prepare the directory as a terraform directory and will download the GCP pluging that terraform uses.
 
