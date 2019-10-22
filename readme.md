@@ -65,7 +65,7 @@ $ sudo chef-manage-ctl reconfigure
 
 ##### for workstation installation, I'll be using version 0.9.42-1, other versions are available at https://downloads.chef.io
 ```
-$sudo yum install -y wget
+$ sudo yum install -y wget
 $ sudo wget https://packages.chef.io/files/stable/chef-workstation/0.9.42/el/7/chef-workstation-0.9.42-1.el7.x86_64.rpm
 $ sudo rpm -ivh chef-workstation-0.9.42-1.el7.x86_64.rpm
 ```
@@ -144,4 +144,4 @@ end
 `$ knife winrm 'name:windows-node' 'chef-client' -x user_name -P user_password`
 
 ##### Here's how to apply run_list to a linux node:
-`$knife ssh 'name:linux-node' 'sudo chef-client' -x user_name -P user_password`
+`$ knife ssh 'name:linux-node' 'sudo chef-client' -x user_name -P user_password`
