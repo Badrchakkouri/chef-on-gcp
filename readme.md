@@ -1,4 +1,8 @@
 
+# A glance at the project
+
+In this project I'll be installing and configuring Chef using instances in GCP built with Terraform.
+
 # How to build the instances with Terraform?
 
 First I create a `GCP-account.json` file and I fill it with my GCP connection info like project_id, client_id, private_key... this can also be done with a better option which is generating directly this file form the GCP IAM console. the json file is being called in the `provider.tf` in order for terraform to use its info to access my GCP account.
@@ -28,6 +32,8 @@ magic of using Chef!
 I will try to make a better guide with screenshots later when I'll get more time. For now I hope this helps.
 
 ## 1- Chef Server installation
+
+Let's login into chefserver instance and do the following:
 
 ##### server prerequisites: set a hostname and fqdn
 `$ sudo hostnamectl set-hostname chef-server.example.com --static`
@@ -63,6 +69,8 @@ $ sudo chef-manage-ctl reconfigure
 
 ## Chef Workstation installation
 
+Let's login into chefworkstation instance and do the following:
+
 ##### for workstation installation, I'll be using version 0.9.42-1, other versions are available at https://downloads.chef.io
 ```
 $ sudo yum install -y wget
@@ -85,19 +93,18 @@ $ sudo knife ssl fetch
 
 ##### nodes bootstrapping meaning linking the nodes to the server in other terms installing the chef-client and its configuration
 ##### for Linux nodes:
-##### I need first to have SSH user pass authentication enabled, this is achievable by enabling it in /etc/ssh/sshd_config and restarting sshd
-
-`$ knife bootstrap [node_IP] -N [node_name] -x username -P password --sudo`
+##### I need first to have SSH user pass authentication enabled in the chefnode instance, this is achievable by enabling it in /etc/ssh/sshd_config and restarting sshd
+`$ knife bootstrap [chefnode_IP] -N linux-node -x username -P password --sudo`
 
 ##### for windows nodes:
-##### I need winrm to be enabled and chef workstation and chef server to be added to winrm trusted hosts and ports 5985/5986 to be allowed
+##### I need winrm to be enabled in chefnodewin instance. I need also chef workstation and chef server to be added to winrm trusted hosts and ports 5985/5986 to be allowed
 ##### I'll use powershell to enable winrm with: Enable-PSRemoting cmdlet
 ##### Then I'll edit the trusted hosts: Set-Item WSMan:\localhost\Client\TrustedHosts [chef-server], [chef-workstation]
 ##### Then I'll restart winrm with Restart-Service winrm
-
-`$ knife bootstrap -o winrm [node_IP] -N [node_name] -U windows_user -P windows_user_pass`
+`$ knife bootstrap -o winrm [chefnodewin_IP] -N windows-node -U windows_user -P windows_user_pass`
 
 ## Chef usage logic, generating cookbooks, writing recipes and applying them
+Let's login into chefworkstation instance and do the following:
 
 ##### I first generate a new cookbook: cd to chef-repo/cookbooks,then
 `$ chef generate cookbook cookbook_name`
@@ -107,17 +114,22 @@ $ sudo knife ssl fetch
 ##### for linux,
 ##### I'll go with an example of installing nginx and replacing the default index.html file. 
 ##### My custom index.html is created under chef-repo/cookbooks/cookbook_name/files and chef will use it to replace the default index.html 
-
 ```
 #first I install the package nginx
+
     package 'nginx' do
         action : install
     end
+    
 #then I enable and start the service nginx
+
     service 'nginx' do
         action [ :enable, :start ]
     end
-#My custom index.html is created under chef-repo/cookbooks/cookbook_name/files and chef will use it to replace the default one using the code below
+    
+#My custom index.html is created under chef-repo/cookbooks/cookbook_name/files and chef will use it to replace the default one using the 
+
+code below
     cookbook_file '/var/www/html/index.html' do
         source 'index.html'
         mode '0777'
