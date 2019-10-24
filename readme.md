@@ -127,9 +127,8 @@ Let's login into chefworkstation instance and do the following:
         action [ :enable, :start ]
     end
     
-#My custom index.html is created under chef-repo/cookbooks/cookbook_name/files and chef will use it to replace the default one using the 
-
-code below
+#My custom index.html is created under chef-repo/cookbooks/cookbook_name/files and chef will use it to replace the default one using the code below
+    
     cookbook_file '/var/www/html/index.html' do
         source 'index.html'
         mode '0777'
